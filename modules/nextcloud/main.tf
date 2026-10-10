@@ -121,7 +121,7 @@ resource "azurerm_container_app" "nc_mariadb_container" {
   }
 
   ingress {
-    allow_insecure_connections = false
+    allow_insecure_connections = true
     external_enabled                   = false
     target_port                = 3306
     traffic_weight {
@@ -178,13 +178,13 @@ resource "azurerm_container_app" "nc_nextcloud_container" {
 
       volume_mounts {
         name = "nc-data"
-        path = "/var/www/html"
+        path = "/var/www/html/data"
       }
     }
   }
 
   ingress {
-    allow_insecure_connections = false
+    allow_insecure_connections = true
     external_enabled                   = true
     target_port                = 80
     traffic_weight {
