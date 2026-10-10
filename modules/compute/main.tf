@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "pip" {
-  name                = "${var.project}-${var.environment}-pip"
+  name                = var.pip_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
@@ -8,26 +8,26 @@ resource "azurerm_public_ip" "pip" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  name                = "${var.project}-${var.environment}-nic"
+  name                = var.nic_name
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = var.tags
 
   ip_configuration {
-    name                          = "internal"
+    name                          = var.ip_config_name
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
 }
 
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
+  network_interface_id      = azurerm_network_interface.nic.id
+  network_security_group_id = var.nsg_id
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "${var.project}-${var.environment}-vm"
+  name                = var.vm_name
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = var.vm_size
@@ -39,18 +39,23 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = tls_private_key.ssh.public_key_openssh
+    public_key = var.public_key
   }
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "Premium_LRS"
+    name                 = "${var.vm_name}_OsDisk_1_60fa002e0e474d46a9d5b41e6af592a2"
+  }
+
+  lifecycle {
+    ignore_changes = [admin_ssh_key]
   }
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
+    offer     = "ubuntu-24_04-lts"
+    sku       = "server"
     version   = "latest"
   }
 }

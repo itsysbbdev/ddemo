@@ -1,0 +1,171 @@
+[0m[1mmodule.networking.azurerm_virtual_network.vnet: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET][0m
+[0m[1mmodule.compute.azurerm_public_ip.pip: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/publicIPAddresses/anitacuki-pip][0m
+[0m[1mmodule.networking.azurerm_network_security_group.nsg: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg][0m
+[0m[1mmodule.networking.azurerm_network_security_group.nsg: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg][0m
+[0m[1mmodule.networking.azurerm_virtual_network.vnet: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET][0m
+[0m[1mmodule.compute.azurerm_public_ip.pip: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/publicIPAddresses/anitacuki-pip][0m
+[0m[1mmodule.networking.azurerm_subnet.subnet: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET/subnets/anitacuki-vmSubnet][0m
+[0m[1mmodule.networking.azurerm_subnet.subnet: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET/subnets/anitacuki-vmSubnet][0m
+[0m[1mmodule.compute.azurerm_network_interface.nic: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic][0m
+[0m[1mmodule.compute.azurerm_network_interface.nic: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic][0m
+[0m[1mmodule.compute.azurerm_network_interface_security_group_association.nsg_assoc: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic|/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg][0m
+[0m[1mmodule.compute.azurerm_linux_virtual_machine.vm: Preparing import... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Compute/virtualMachines/anitacuki-vm][0m
+[0m[1mmodule.compute.azurerm_network_interface_security_group_association.nsg_assoc: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic|/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg][0m
+[0m[1mmodule.compute.azurerm_linux_virtual_machine.vm: Refreshing state... [id=/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Compute/virtualMachines/anitacuki-vm][0m
+
+Terraform planned the following actions, but then encountered a problem:
+
+[1m  # module.compute.azurerm_network_interface.nic[0m will be imported
+[0m    resource "azurerm_network_interface" "nic" {
+        accelerated_networking_enabled = false
+        applied_dns_servers            = []
+        auxiliary_mode                 = [90mnull[0m[0m
+        auxiliary_sku                  = [90mnull[0m[0m
+        dns_servers                    = []
+        edge_zone                      = [90mnull[0m[0m
+        enable_accelerated_networking  = false
+        enable_ip_forwarding           = false
+        id                             = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic"
+        internal_dns_name_label        = [90mnull[0m[0m
+        internal_domain_name_suffix    = "xvnort14azduji0ehgg0t3ezga.viex.internal.cloudapp.net"
+        ip_forwarding_enabled          = false
+        location                       = "austriaeast"
+        mac_address                    = "38-33-C5-FD-0B-D1"
+        name                           = "anitacuki-vmVMNic"
+        private_ip_address             = "10.0.0.4"
+        private_ip_addresses           = [
+            "10.0.0.4",
+        ]
+        resource_group_name            = "anitacuki"
+        tags                           = {}
+        virtual_machine_id             = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Compute/virtualMachines/anitacuki-vm"
+
+        ip_configuration {
+            gateway_load_balancer_frontend_ip_configuration_id = [90mnull[0m[0m
+            name                                               = "ipconfiganitacuki-vm"
+            primary                                            = true
+            private_ip_address                                 = "10.0.0.4"
+            private_ip_address_allocation                      = "Dynamic"
+            private_ip_address_version                         = "IPv4"
+            public_ip_address_id                               = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/publicIPAddresses/anitacuki-pip"
+            subnet_id                                          = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET/subnets/anitacuki-vmSubnet"
+        }
+    }
+
+[1m  # module.compute.azurerm_network_interface_security_group_association.nsg_assoc[0m will be imported
+[0m    resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
+        id                        = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic|/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg"
+        network_interface_id      = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkInterfaces/anitacuki-vmVMNic"
+        network_security_group_id = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg"
+    }
+
+[1m  # module.compute.azurerm_public_ip.pip[0m will be imported
+[0m    resource "azurerm_public_ip" "pip" {
+        allocation_method       = "Static"
+        ddos_protection_mode    = "VirtualNetworkInherited"
+        edge_zone               = [90mnull[0m[0m
+        id                      = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/publicIPAddresses/anitacuki-pip"
+        idle_timeout_in_minutes = 4
+        ip_address              = "68.210.100.56"
+        ip_tags                 = {}
+        ip_version              = "IPv4"
+        location                = "austriaeast"
+        name                    = "anitacuki-pip"
+        resource_group_name     = "anitacuki"
+        sku                     = "Standard"
+        sku_tier                = "Regional"
+        tags                    = {}
+        zones                   = []
+    }
+
+[1m  # module.networking.azurerm_network_security_group.nsg[0m will be imported
+[0m    resource "azurerm_network_security_group" "nsg" {
+        id                  = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/networkSecurityGroups/anitacuki-nsg"
+        location            = "austriaeast"
+        name                = "anitacuki-nsg"
+        resource_group_name = "anitacuki"
+        security_rule       = [
+            {
+                access                                     = "Allow"
+                description                                = [90mnull[0m[0m
+                destination_address_prefix                 = "*"
+                destination_address_prefixes               = []
+                destination_application_security_group_ids = []
+                destination_port_range                     = [90mnull[0m[0m
+                destination_port_ranges                    = [
+                    "22",
+                    "3000",
+                    "3100",
+                    "443",
+                    "6001",
+                    "6002",
+                    "80",
+                    "8000",
+                ]
+                direction                                  = "Inbound"
+                name                                       = "Allow-Whitelisted-IP-Only"
+                priority                                   = 100
+                protocol                                   = "Tcp"
+                source_address_prefix                      = "*"
+                source_address_prefixes                    = []
+                source_application_security_group_ids      = []
+                source_port_range                          = "*"
+                source_port_ranges                         = []
+            },
+        ]
+        tags                = {}
+    }
+
+[1m  # module.networking.azurerm_subnet.subnet[0m will be imported
+[0m    resource "azurerm_subnet" "subnet" {
+        address_prefixes                               = [
+            "10.0.0.0/24",
+        ]
+        default_outbound_access_enabled                = true
+        enforce_private_link_endpoint_network_policies = true
+        enforce_private_link_service_network_policies  = false
+        id                                             = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET/subnets/anitacuki-vmSubnet"
+        name                                           = "anitacuki-vmSubnet"
+        private_endpoint_network_policies              = "Disabled"
+        private_endpoint_network_policies_enabled      = false
+        private_link_service_network_policies_enabled  = true
+        resource_group_name                            = "anitacuki"
+        service_endpoint_policy_ids                    = []
+        service_endpoints                              = []
+        virtual_network_name                           = "anitacuki-vmVNET"
+    }
+
+[1m  # module.networking.azurerm_virtual_network.vnet[0m will be imported
+[0m    resource "azurerm_virtual_network" "vnet" {
+        address_space           = [
+            "10.0.0.0/16",
+        ]
+        bgp_community           = [90mnull[0m[0m
+        dns_servers             = []
+        edge_zone               = [90mnull[0m[0m
+        flow_timeout_in_minutes = 0
+        guid                    = "cfe85abd-067e-4447-a344-398da9f49930"
+        id                      = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET"
+        location                = "austriaeast"
+        name                    = "anitacuki-vmVNET"
+        resource_group_name     = "anitacuki"
+        subnet                  = [
+            {
+                address_prefix = "10.0.0.0/24"
+                id             = "/subscriptions/dfbe2d24-6ec8-49a9-9beb-e3a1314f2cc4/resourceGroups/anitacuki/providers/Microsoft.Network/virtualNetworks/anitacuki-vmVNET/subnets/anitacuki-vmSubnet"
+                name           = "anitacuki-vmSubnet"
+                security_group = [90mnull[0m[0m
+            },
+        ]
+        tags                    = {}
+    }
+
+[1mPlan:[0m [0m6 to import, 0 to add, 0 to change, 0 to destroy.
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mdecoding "admin_ssh_key.0.public_key" for public key data[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.compute.azurerm_linux_virtual_machine.vm,
+[31m│[0m [0m  on ../../modules/compute/main.tf line 29, in resource "azurerm_linux_virtual_machine" "vm":
+[31m│[0m [0m  29: resource "azurerm_linux_virtual_machine" "vm" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
