@@ -132,7 +132,7 @@ resource "azurerm_container_app" "nc_mariadb_container" {
 }
 
 resource "azurerm_container_app" "nc_nextcloud_container" {
-  name                         = "nc-nextcloud"
+  name                         = "bb-nextcloud"
   container_app_environment_id = azurerm_container_app_environment.nc_aca_env.id
   resource_group_name          = var.nc_resource_group_name
   revision_mode                = "Single"

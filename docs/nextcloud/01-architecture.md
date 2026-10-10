@@ -11,3 +11,6 @@ A tesztkörnyezet a költséghatékonyság és egyszerű üzemeltetés érdekéb
 
 ## Ismert korlátok
 - A MariaDB és más relációs adatbázisok Azure Files (SMB) feletti futtatása esetén előfordulhatnak lock vagy I/O problémák az SQLite/MariaDB szintjén. Teszteléshez és kisebb terheléshez megfelelő, éles környezetben (Production) dedikált Azure Database for MariaDB vagy PostgreSQL szolgáltatás javasolt.
+
+## Alkalmazás elnevezése és URL
+A Nextcloud alkalmazás konténerének (Azure Container App) neve `bb-nextcloud`, ami azt eredményezi, hogy az automatikusan generált `.azurecontainerapps.io` tartomány is ezzel a `bb-nextcloud` prefixszel fog kezdődni.

@@ -30,7 +30,7 @@ workspace "DDemo Infrastructure" "DDemo Azure környezet architectúra" {
 
         nextcloud = softwareSystem "Nextcloud Rendszer" "Fájlmegosztás és kollaboráció" {
             nc_aca_env = container "Azure Container Apps Env" "Serverless konténer platform" "ACA"
-            nc_app = container "Nextcloud App" "Webes frontend és alkalmazás szerver" "Container (PHP/Apache)"
+            nc_app = container "Nextcloud App (bb-nextcloud)" "Webes frontend és alkalmazás szerver" "Container (PHP/Apache)"
             nc_mariadb = container "MariaDB" "Relációs adatbázis" "Container (MariaDB)"
             nc_storage = container "Azure Files Storage" "Perzisztens adat és adatbázis tárhely" "Storage Account"
 
