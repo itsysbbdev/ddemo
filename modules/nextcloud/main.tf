@@ -123,6 +123,7 @@ resource "azurerm_container_app" "nc_mariadb_container" {
     allow_insecure_connections = false
     external_enabled           = false
     target_port                = 3306
+    exposed_port               = 3306
     transport                  = "tcp"
     traffic_weight {
       percentage      = 100
@@ -162,6 +163,10 @@ resource "azurerm_container_app" "nc_nextcloud_container" {
       env {
         name  = "MYSQL_HOST"
         value = "${azurerm_container_app.nc_mariadb_container.ingress[0].fqdn}:3306"
+      }
+      env {
+        name  = "RESTART_TRIGGER"
+        value = timestamp()
       }
       env {
         name  = "MYSQL_DATABASE"
