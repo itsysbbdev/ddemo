@@ -17,3 +17,14 @@
   - `admin_username` (string)
 - **Kimenetek (Outputs):**
   - `public_ip_address`: A publikus IP cím az eléréshez.
+
+## 3. App Service Modul (`modules/app_service`)
+- **Feladata:** Azure App Service Plan (Linux) és egy Docker alapú Linux Web App létrehozása.
+- **Bemenetek (Variables):**
+  - `app_name`, `location`, `resource_group_name` (string)
+  - `sku_name` (string): Alapértelmezett B1.
+  - `docker_image` és `docker_registry_url` (string): A használandó konténer elérhetősége.
+  - `websites_port` (string): Belső konténer port (pl. 3000).
+  - `app_settings` (map(string)): Környezeti változók a konténernek.
+- **Kimenetek (Outputs):**
+  - `app_service_default_hostname`: Generált azurewebsites.net domain.

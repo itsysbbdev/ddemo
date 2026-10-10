@@ -18,3 +18,7 @@ C4Context
   System(ddemo, "DDemo Azure Infrastruktúra", "Hálózat és számítási kapacitás")
   Rel(admin, ddemo, "Kezeli (OIDC & Terraform)")
 ```
+
+## Remote Browser Isolation (Firefox App)
+Egy beágyazott böngésző szolgáltatás ("Browser in browser") került hozzáadásra az architektúrához, ami egy Azure App Service for Containers alapú platformon fut. 
+Ez a Linux környezet HTTPS protokollon teszi elérhetővé a `linuxserver/firefox` image-et, így biztonságos web streaming érhető el kliens telepítés nélkül.
