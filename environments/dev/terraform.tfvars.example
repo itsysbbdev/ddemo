@@ -1,0 +1,15 @@
+project             = "ddemo"
+environment         = "dev"
+location            = "westeurope"
+resource_group_name = "ddemo-dev-rg"
+vnet_address_space  = ["10.0.0.0/16"]
+subnet_prefixes     = ["10.0.1.0/24"]
+admin_ip            = "0.0.0.0/0" # Változtasd meg a saját IP címedre! (pl. x.x.x.x/32)
+vm_size             = "Standard_B2s"
+admin_username      = "adminuser"
+tags = {
+  Environment = "dev"
+  Project     = "ddemo"
+  ManagedBy   = "terraform"
+  Owner       = "IT"
+}
