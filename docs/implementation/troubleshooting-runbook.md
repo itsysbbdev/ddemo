@@ -7,3 +7,19 @@
 2. **OIDC Authentication Failed:**
    - *Ok:* Lejárt vagy hibás Federated Credentials beállítás.
    - *Megoldás:* Ellenőrizd a Service Principal OIDC "Federated credentials" beállítását az Azure Entra ID-ben.
+
+## Napi üzemeltetési eljárások (Operations & Maintenance)
+
+A karbantartási, frissítési vagy hibaelhárítási folyamatok során hasznos lehet az alkalmazások gyors leállítása és újraindítása anélkül, hogy a teljes infrastruktúrát újra kellene építeni.
+
+**Firefox-app (Remote Browser) gyors karbantartási rutinja:**
+
+- **Szolgáltatás leállítása** (ideiglenes hozzáférés megszüntetése vagy karbantartás céljából):
+  ```bash
+  az webapp stop --name "firefox-app-bb" --resource-group "Firefox-app"
+  ```
+
+- **Szolgáltatás újraindítása** (beragadt konténer újraindítása vagy frissítések érvényesítése):
+  ```bash
+  az webapp start --name "firefox-app-bb" --resource-group "Firefox-app"
+  ```
