@@ -15,7 +15,7 @@ resource "azurerm_linux_web_app" "app" {
   https_only          = true
 
   site_config {
-    always_on = true
+    always_on          = true
     websockets_enabled = var.websockets_enabled
     application_stack {
       docker_image_name   = var.docker_image

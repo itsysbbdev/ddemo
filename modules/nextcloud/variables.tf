@@ -14,6 +14,6 @@ variable "nc_storage_account_name" {
 }
 
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }

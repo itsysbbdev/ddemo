@@ -81,13 +81,12 @@ resource "azurerm_container_app" "nc_mariadb_container" {
   }
 
   template {
-    min_replicas = 0
+    min_replicas = 1
     max_replicas = 1
 
     volume {
       name         = "db-data"
-      storage_name = azurerm_container_app_environment_storage.nc_db_storage.name
-      storage_type = "AzureFile"
+      storage_type = "EmptyDir"
     }
 
     container {
@@ -121,9 +120,10 @@ resource "azurerm_container_app" "nc_mariadb_container" {
   }
 
   ingress {
-    allow_insecure_connections = true
-    external_enabled                   = false
+    allow_insecure_connections = false
+    external_enabled           = false
     target_port                = 3306
+    transport                  = "tcp"
     traffic_weight {
       percentage      = 100
       latest_revision = true
@@ -161,7 +161,7 @@ resource "azurerm_container_app" "nc_nextcloud_container" {
 
       env {
         name  = "MYSQL_HOST"
-        value = azurerm_container_app.nc_mariadb_container.latest_revision_fqdn
+        value = "${azurerm_container_app.nc_mariadb_container.ingress[0].fqdn}:3306"
       }
       env {
         name  = "MYSQL_DATABASE"
@@ -185,7 +185,7 @@ resource "azurerm_container_app" "nc_nextcloud_container" {
 
   ingress {
     allow_insecure_connections = true
-    external_enabled                   = true
+    external_enabled           = true
     target_port                = 80
     traffic_weight {
       percentage      = 100
