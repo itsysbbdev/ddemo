@@ -41,10 +41,27 @@ module "firefox_app" {
   docker_registry_url = "https://lscr.io"
   websites_port       = "3000"
   websockets_enabled  = true
-  
+
   app_settings = {
     "CUSTOM_USER"                         = "admin"
     "PASSWORD"                            = "SecurePassword123!"
     "WEBSITES_CONTAINER_START_TIME_LIMIT" = "1800"
   }
+}
+
+resource "azurerm_resource_group" "nc_rg" {
+  name     = "nextcloud"
+  location = "austriaeast"
+}
+
+module "nextcloud" {
+  source                  = "../../modules/nextcloud"
+  location                = azurerm_resource_group.nc_rg.location
+  nc_resource_group_name  = azurerm_resource_group.nc_rg.name
+  nc_storage_account_name = "ncstorage${random_id.nc_storage_id.hex}"
+  tags                    = {}
+}
+
+resource "random_id" "nc_storage_id" {
+  byte_length = 4
 }

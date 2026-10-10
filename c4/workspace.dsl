@@ -26,4 +26,20 @@ workspace "DDemo Infrastructure" "DDemo Azure környezet architectúra" {
         }
         theme default
     }
+
+
+        nextcloud = softwareSystem "Nextcloud Rendszer" "Fájlmegosztás és kollaboráció" {
+            nc_aca_env = container "Azure Container Apps Env" "Serverless konténer platform" "ACA"
+            nc_app = container "Nextcloud App" "Webes frontend és alkalmazás szerver" "Container (PHP/Apache)"
+            nc_mariadb = container "MariaDB" "Relációs adatbázis" "Container (MariaDB)"
+            nc_storage = container "Azure Files Storage" "Perzisztens adat és adatbázis tárhely" "Storage Account"
+
+            nc_app -> nc_mariadb "Olvas/Ír adatokat"
+            nc_app -> nc_storage "Fájlok tárolása (SMB Mount)"
+            nc_mariadb -> nc_storage "Adatbázis fájlok (SMB Mount)"
+            nc_aca_env -> nc_app "Futásidőt biztosít"
+            nc_aca_env -> nc_mariadb "Futásidőt biztosít"
+        }
+
+        user -> nc_app "Böngészi (HTTPS)"
 }
