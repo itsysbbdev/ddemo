@@ -2,7 +2,7 @@
 set -e
 
 RG_NAME="rg-terraform-state"
-LOCATION="westeurope"
+LOCATION="austriaeast"
 SA_NAME="sttfstate$(shuf -i 10000-99999 -n 1)"
 CONTAINER_NAME="tfstate"
 
