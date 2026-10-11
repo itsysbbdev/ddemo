@@ -15,8 +15,8 @@ pool:
 variables:
   - name: TF_WORKING_DIR
     value: 'environments/dev'
-  # Pipeline variable configured in Azure DevOps:
-  # - AZURE_SERVICE_CONNECTION
+  - name: AZURE_SERVICE_CONNECTION
+    value: 'AZURE_SERVICE_CONNECTION'
 
 steps:
   # 1. Install Terraform
