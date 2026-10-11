@@ -22,7 +22,6 @@ workspace "DDemo Infrastructure" "DDemo Azure környezet architectúra" {
         }
 
         azureDevOps = softwareSystem "Azure DevOps Pipeline" "CI/CD automatizáció és validáció (azure-pipelines.yml)"
-        infracost = softwareSystem "Infracost" "Felhőköltség-becslő és FinOps analitikai platform"
 
         user -> azureDevOps "Kódot commitol és Pull Requestet nyit (Git)"
         user -> azure "Kezeli és felügyeli (Azure Portal / CLI)"
@@ -31,10 +30,8 @@ workspace "DDemo Infrastructure" "DDemo Azure környezet architectúra" {
         user -> firefox "Böngészik a felületen (HTTPS)"
         user -> nc_app "Böngészi (HTTPS)"
 
-        azureDevOps -> infracost "Költségbecslést kér a Terraform kódra ($(INFRACOST_API_KEY))"
         azureDevOps -> azure "Terraform init és plan végrehajtása ($(AZURE_SERVICE_CONNECTION))"
         azureDevOps -> nextcloud "Infrastruktúra komponensek telepítése és validálása"
-        infracost -> user "Költségbecslési riportot ad vissza a Pull Requestben"
 
         compute -> vnet "Hálózati hozzáférést használ"
     }

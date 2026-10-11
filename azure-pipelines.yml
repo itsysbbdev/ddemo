@@ -1,4 +1,4 @@
-# Azure DevOps CI/CD Pipeline for Terraform & Infracost
+# Azure DevOps CI/CD Pipeline for Terraform
 trigger:
   branches:
     include:
@@ -15,8 +15,7 @@ pool:
 variables:
   - name: TF_WORKING_DIR
     value: 'environments/dev'
-  # Pipeline variables configured in Azure DevOps:
-  # - INFRACOST_API_KEY (Secret)
+  # Pipeline variable configured in Azure DevOps:
   # - AZURE_SERVICE_CONNECTION
 
 steps:
@@ -29,7 +28,7 @@ steps:
       terraform -version
     displayName: 'Install Terraform'
 
-  # a) Terraform Format and Validation
+  # 2. Terraform Format and Validate
   - script: |
       echo "##[section]Checking Terraform formatting..."
       terraform fmt -check
@@ -39,18 +38,7 @@ steps:
     workingDirectory: $(TF_WORKING_DIR)
     displayName: 'Terraform Format & Validate'
 
-  # b) Infracost Installation and Breakdown
-  - script: |
-      echo "##[section]Installing Infracost..."
-      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
-      infracost --version
-      echo "##[section]Running Infracost breakdown..."
-      infracost breakdown --path $(TF_WORKING_DIR)
-    displayName: 'Infracost Breakdown'
-    env:
-      INFRACOST_API_KEY: $(INFRACOST_API_KEY)
-
-  # c) Terraform Init and Plan
+  # 3. Terraform Init and Plan
   - task: AzureCLI@2
     displayName: 'Terraform Init & Plan'
     inputs:
