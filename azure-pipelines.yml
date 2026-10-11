@@ -1,0 +1,65 @@
+# Azure DevOps CI/CD Pipeline for Terraform & Infracost
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: TF_WORKING_DIR
+    value: 'environments/dev'
+  # Pipeline variables configured in Azure DevOps:
+  # - INFRACOST_API_KEY (Secret)
+  # - AZURE_SERVICE_CONNECTION
+
+steps:
+  # 1. Install Terraform
+  - script: |
+      sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+      sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+      sudo apt-get update && sudo apt-get install -y terraform
+      terraform -version
+    displayName: 'Install Terraform'
+
+  # a) Terraform Format and Validation
+  - script: |
+      echo "##[section]Checking Terraform formatting..."
+      terraform fmt -check
+      echo "##[section]Validating Terraform configuration..."
+      terraform init -backend=false
+      terraform validate
+    workingDirectory: $(TF_WORKING_DIR)
+    displayName: 'Terraform Format & Validate'
+
+  # b) Infracost Installation and Breakdown
+  - script: |
+      echo "##[section]Installing Infracost..."
+      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+      infracost --version
+      echo "##[section]Running Infracost breakdown..."
+      infracost breakdown --path $(TF_WORKING_DIR)
+    displayName: 'Infracost Breakdown'
+    env:
+      INFRACOST_API_KEY: $(INFRACOST_API_KEY)
+
+  # c) Terraform Init and Plan
+  - task: AzureCLI@2
+    displayName: 'Terraform Init & Plan'
+    inputs:
+      azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      workingDirectory: '$(TF_WORKING_DIR)'
+      inlineScript: |
+        echo "##[section]Running Terraform Init..."
+        terraform init
+        echo "##[section]Running Terraform Plan..."
+        terraform plan -no-color
