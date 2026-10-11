@@ -10,7 +10,7 @@ pr:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
 
 variables:
   - name: TF_WORKING_DIR
@@ -19,14 +19,17 @@ variables:
     value: 'AZURE_SERVICE_CONNECTION'
 
 steps:
-  # 1. Install Terraform
+  # 1. Ensure Terraform is installed
   - script: |
-      sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
-      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-      sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-      sudo apt-get update && sudo apt-get install -y terraform
+      if ! command -v terraform &>/dev/null; then
+        echo "##[section]Installing Terraform..."
+        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        sudo apt-get update && sudo apt-get install -y terraform
+      fi
       terraform -version
-    displayName: 'Install Terraform'
+    displayName: 'Ensure Terraform'
 
   # 2. Terraform Format and Validate
   - script: |
@@ -51,3 +54,4 @@ steps:
         terraform init
         echo "##[section]Running Terraform Plan..."
         terraform plan -no-color
+
