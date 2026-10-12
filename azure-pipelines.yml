@@ -73,6 +73,8 @@ stages:
     displayName: 'Deploy'
     dependsOn: Plan
     condition: succeeded()
+    pool:
+      name: 'Default'
     jobs:
       - deployment: DeployJob
         displayName: 'Terraform Apply'
