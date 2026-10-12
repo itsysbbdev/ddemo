@@ -18,40 +18,109 @@ variables:
   - name: AZURE_SERVICE_CONNECTION
     value: 'AZURE_SERVICE_CONNECTION'
 
-steps:
-  # 1. Ensure Terraform is installed
-  - script: |
-      if ! command -v terraform &>/dev/null; then
-        echo "##[section]Installing Terraform..."
-        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
-        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-        sudo apt-get update && sudo apt-get install -y terraform
-      fi
-      terraform -version
-    displayName: 'Ensure Terraform'
+stages:
+  - stage: Plan
+    displayName: 'Plan'
+    jobs:
+      - job: PlanJob
+        displayName: 'Terraform Plan'
+        steps:
+          # 1. Ensure Terraform is installed
+          - script: |
+              if ! command -v terraform &>/dev/null; then
+                echo "##[section]Installing Terraform..."
+                sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+                curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+                sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+                sudo apt-get update && sudo apt-get install -y terraform
+              fi
+              terraform -version
+            displayName: 'Ensure Terraform'
 
-  # 2. Terraform Format and Validate
-  - script: |
-      echo "##[section]Checking Terraform formatting..."
-      terraform fmt -check
-      echo "##[section]Validating Terraform configuration..."
-      terraform init -backend=false
-      terraform validate
-    workingDirectory: $(TF_WORKING_DIR)
-    displayName: 'Terraform Format & Validate'
+          # 2. Terraform Format and Validate
+          - script: |
+              echo "##[section]Checking Terraform formatting..."
+              terraform fmt -check
+              echo "##[section]Validating Terraform configuration..."
+              terraform init -backend=false
+              terraform validate
+            workingDirectory: $(TF_WORKING_DIR)
+            displayName: 'Terraform Format & Validate'
 
-  # 3. Terraform Init and Plan
-  - task: AzureCLI@2
-    displayName: 'Terraform Init & Plan'
-    inputs:
-      azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      workingDirectory: '$(TF_WORKING_DIR)'
-      inlineScript: |
-        echo "##[section]Running Terraform Init..."
-        terraform init
-        echo "##[section]Running Terraform Plan..."
-        terraform plan -no-color
+          # 3. Terraform Init and Plan
+          - task: AzureCLI@2
+            displayName: 'Terraform Init & Plan'
+            inputs:
+              azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(TF_WORKING_DIR)'
+              inlineScript: |
+                echo "##[section]Running Terraform Init..."
+                terraform init
+                echo "##[section]Running Terraform Plan..."
+                terraform plan -out=tfplan -no-color
+
+          # 4. Save tfplan artifact
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish tfplan artifact'
+            inputs:
+              targetPath: '$(TF_WORKING_DIR)/tfplan'
+              artifact: 'tfplan'
+              publishLocation: 'pipeline'
+
+  - stage: Deploy
+    displayName: 'Deploy'
+    dependsOn: Plan
+    condition: succeeded()
+    jobs:
+      - deployment: DeployJob
+        displayName: 'Terraform Apply'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                # 1. Ensure Terraform is installed
+                - script: |
+                    if ! command -v terraform &>/dev/null; then
+                      echo "##[section]Installing Terraform..."
+                      sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+                      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+                      sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+                      sudo apt-get update && sudo apt-get install -y terraform
+                    fi
+                    terraform -version
+                  displayName: 'Ensure Terraform'
+
+                # 2. Download tfplan artifact
+                - task: DownloadPipelineArtifact@2
+                  displayName: 'Download tfplan artifact'
+                  inputs:
+                    buildType: 'current'
+                    artifactName: 'tfplan'
+                    targetPath: '$(Pipeline.Workspace)/tfplan'
+
+                # 3. Terraform Init and Apply
+                - task: AzureCLI@2
+                  displayName: 'Terraform Init & Apply'
+                  inputs:
+                    azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    workingDirectory: '$(TF_WORKING_DIR)'
+                    inlineScript: |
+                      echo "##[section]Copying tfplan to working directory..."
+                      if [ -f "$(Pipeline.Workspace)/tfplan/tfplan" ]; then
+                        cp "$(Pipeline.Workspace)/tfplan/tfplan" ./tfplan
+                      elif [ -f "$(Pipeline.Workspace)/tfplan" ]; then
+                        cp "$(Pipeline.Workspace)/tfplan" ./tfplan
+                      fi
+                      echo "##[section]Running Terraform Init..."
+                      terraform init
+                      echo "##[section]Running Terraform Apply..."
+                      terraform apply -auto-approve tfplan
+
 
