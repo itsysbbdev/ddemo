@@ -1,10 +1,4 @@
 terraform {
-  backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "ddemotfstate2026"
-    container_name       = "tfstate"
-    key                  = "nextcloud-prod.tfstate"
-  }
 }
 
 resource "azurerm_storage_account" "nc_storage_account" {
