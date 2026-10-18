@@ -1,0 +1,12 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(aca, "Azure Container Apps (Nextcloud Env)") {
+    Container(nextcloud, "Nextcloud Web", "PHP/Apache", "Fájlkezelés és UI. (check_data_directory_permissions = false)")
+    ContainerDb(mariadb, "MariaDB", "MySQL", "Relációs metaadatbázis")
+}
+SystemExt(azure_files, "Azure Files", "SMB megosztás (Perzisztens adatkönyvtár)")
+
+Rel(nextcloud, mariadb, "Adatolvasás/Írás (Belső DNS: nc-mariadb)", "TCP/3306")
+Rel(nextcloud, azure_files, "Fájlok tárolása", "SMB")
+@enduml
