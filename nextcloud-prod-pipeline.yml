@@ -1,0 +1,63 @@
+trigger: none
+
+pool: Default
+
+variables:
+  azureServiceConnection: 'YOUR-SERVICE-CONNECTION-NAME'
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/modules/nextcloud'
+
+stages:
+- stage: Plan
+  jobs:
+  - job: TerraformPlan
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      displayName: 'Terraform Init & Plan'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: $(terraformWorkingDirectory)
+        inlineScript: |
+          terraform init \
+            -backend-config="resource_group_name=tfstate-rg" \
+            -backend-config="storage_account_name=ddemotfstate2026" \
+            -backend-config="container_name=tfstate" \
+            -backend-config="key=nextcloud-prod.tfstate"
+          terraform plan -out=tfplan
+
+- stage: Deploy
+  dependsOn: Plan
+  condition: succeeded()
+  jobs:
+  - deployment: TerraformApply
+    environment: 'nextcloud-prod'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: AzureCLI@2
+            displayName: 'Terraform Init & Apply'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: $(terraformWorkingDirectory)
+              inlineScript: |
+                terraform init \
+                  -backend-config="resource_group_name=tfstate-rg" \
+                  -backend-config="storage_account_name=ddemotfstate2026" \
+                  -backend-config="container_name=tfstate" \
+                  -backend-config="key=nextcloud-prod.tfstate"
+                terraform apply -auto-approve
+
+          # Post-deployment: Jogosultságok kikapcsolása a Nextcloudban
+          - task: AzureCLI@2
+            displayName: 'Post-deploy: Nextcloud mappa-jogosultság fix'
+            inputs:
+              azureSubscription: '<AZURE_SERVICE_CONNECTION_NEVE>' # TODO: Ezt cseréld le a sajátodra!
+              scriptType: 'bash'
+              scriptLocation: 'scriptPath'
+              scriptPath: '$(System.DefaultWorkingDirectory)/scripts/configure-nextcloud.sh'
