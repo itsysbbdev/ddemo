@@ -57,7 +57,7 @@ stages:
           - task: AzureCLI@2
             displayName: 'Post-deploy: Nextcloud mappa-jogosultság fix'
             inputs:
-              azureSubscription: '<AZURE_SERVICE_CONNECTION_NEVE>' # TODO: Ezt cseréld le a sajátodra!
+              azureSubscription: $(azureServiceConnection)
               scriptType: 'bash'
               scriptLocation: 'scriptPath'
               scriptPath: '$(System.DefaultWorkingDirectory)/scripts/configure-nextcloud.sh'
