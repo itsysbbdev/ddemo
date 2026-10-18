@@ -1,3 +1,12 @@
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "tfstate-rg"
+    storage_account_name = "ddemotfstate2026"
+    container_name       = "tfstate"
+    key                  = "nextcloud-prod.tfstate"
+  }
+}
+
 resource "azurerm_storage_account" "nc_storage_account" {
   name                     = var.nc_storage_account_name
   resource_group_name      = var.nc_resource_group_name
@@ -162,7 +171,7 @@ resource "azurerm_container_app" "nc_nextcloud_container" {
 
       env {
         name  = "MYSQL_HOST"
-        value = "${azurerm_container_app.nc_mariadb_container.ingress[0].fqdn}:3306"
+        value = "nc-mariadb"
       }
       env {
         name  = "RESTART_TRIGGER"
